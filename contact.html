@@ -20,7 +20,7 @@
       <a href="services.html">Services</a>
       <a href="insights.html">Insights</a>
       <a href="education.html">Education Materials</a>
-      <a href="login.html">Login</a>
+      <a href="login.html" id="nav-auth-link">Login</a>
       <a href="about.html">About</a>
       <a href="contact.html" class="nav-cta active">Get In Touch</a>
     </nav>
@@ -96,5 +96,11 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  omriUpdateNavAuthLink();
+</script>
 </body>
 </html>

@@ -20,7 +20,7 @@
       <a href="services.html">Services</a>
       <a href="insights.html">Insights</a>
       <a href="education.html">Education Materials</a>
-      <a href="login.html" class="active">Login</a>
+      <a href="login.html" id="nav-auth-link" class="active">Login</a>
       <a href="about.html">About</a>
       <a href="contact.html" class="nav-cta">Get In Touch</a>
     </nav>
@@ -81,6 +81,7 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/auth.js"></script>
 <script>
+  omriUpdateNavAuthLink();
   document.getElementById("login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById("submit-btn");

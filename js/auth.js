@@ -27,3 +27,15 @@ async function omriGetSession() {
 function omriQueryParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
+
+// Swaps the nav's "Login" link for "My Account" when a session exists.
+// Call this on every page after the DOM is ready (see nav <a id="nav-auth-link">).
+async function omriUpdateNavAuthLink() {
+  const link = document.getElementById('nav-auth-link');
+  if (!link) return;
+  const session = await omriGetSession();
+  if (session) {
+    link.textContent = 'My Account';
+    link.setAttribute('href', 'account.html');
+  }
+}

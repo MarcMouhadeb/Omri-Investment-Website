@@ -20,7 +20,7 @@
       <a href="services.html">Services</a>
       <a href="insights.html">Insights</a>
       <a href="education.html">Education Materials</a>
-      <a href="login.html">Login</a>
+      <a href="login.html" id="nav-auth-link">Login</a>
       <a href="about.html">About</a>
       <a href="contact.html" class="nav-cta">Get In Touch</a>
     </nav>
@@ -86,6 +86,7 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/auth.js"></script>
 <script>
+  omriUpdateNavAuthLink();
   // Course names shown here mirror api/_products.js - kept in sync by hand
   // since this is plain static HTML with no shared build step.
   const PRODUCT_NAMES = {
