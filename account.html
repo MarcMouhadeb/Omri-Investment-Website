@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account | Omri Investments</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-logo"><img src="images/logo-full-color.png" alt="Omri Investments"></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#9776;</button>
+    <nav class="site-nav" id="nav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="insights.html">Insights</a>
+      <a href="education.html">Education Materials</a>
+      <a href="login.html">Login</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="nav-cta">Get In Touch</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" style="color:#c9a94f;">Education Materials</span>
+    <h1>My Account</h1>
+    <p id="account-email">&nbsp;</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="purchase-success-msg" class="form-message form-message-success" style="display:none; max-width:640px; margin:0 auto 32px;">
+      Payment received - your course is below. (It can take a few seconds to appear after checkout.)
+    </div>
+
+    <div id="not-logged-in" style="display:none; text-align:center;">
+      <p>You need to log in to see your courses.</p>
+      <a href="login.html" class="btn btn-primary">Log In</a>
+    </div>
+
+    <div id="no-purchases" style="display:none; text-align:center;">
+      <p>You haven't bought any courses yet.</p>
+      <a href="education.html" class="btn btn-primary">Browse Education Materials</a>
+    </div>
+
+    <div id="purchase-list" class="card-grid" style="display:none;"></div>
+
+    <p style="text-align:center; margin-top:40px;">
+      <a href="#" id="logout-link" style="color:var(--gray-text);">Log out</a>
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="images/logo-white.png" alt="Omri Investments">
+        <p style="max-width:320px; color:rgba(255,255,255,0.6); font-size:0.9rem;">Real estate underwriting, due diligence, and capital structure advisory for acquisitions, recapitalizations, and development deals.</p>
+      </div>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="insights.html">Insights</a>
+        <a href="education.html">Education Materials</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Omri Investments. All rights reserved.</span>
+      <span>Miami Beach, FL</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Course names shown here mirror api/_products.js - kept in sync by hand
+  // since this is plain static HTML with no shared build step.
+  const PRODUCT_NAMES = {
+    "intro": "Introduction to Real Estate",
+    "fundamentals": "Real Estate Finance Fundamentals",
+    "advanced": "Advanced: Deal Structuring & Waterfalls",
+    "multifamily": "Multifamily Underwriting",
+    "office": "Office Underwriting",
+    "retail-industrial": "Retail & Industrial Underwriting"
+  };
+
+  async function loadAccount() {
+    const session = await omriGetSession();
+    if (!session) {
+      document.getElementById("not-logged-in").style.display = "block";
+      return;
+    }
+
+    document.getElementById("account-email").textContent = session.user.email;
+
+    if (omriQueryParam("purchase") === "success") {
+      document.getElementById("purchase-success-msg").style.display = "block";
+    }
+
+    const { data: purchases, error } = await sbClient
+      .from("purchases")
+      .select("product_id")
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      console.error("Failed to load purchases:", error);
+      return;
+    }
+
+    const productIds = [...new Set((purchases || []).map((p) => p.product_id))];
+    if (productIds.length === 0) {
+      document.getElementById("no-purchases").style.display = "block";
+      return;
+    }
+
+    const listEl = document.getElementById("purchase-list");
+    listEl.style.display = "grid";
+    productIds.forEach((productId) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${PRODUCT_NAMES[productId] || productId}</h3>
+        <div class="download-links" id="links-${productId}"></div>
+        <button class="btn btn-outline-navy" data-product="${productId}">Get Download Links</button>
+      `;
+      listEl.appendChild(card);
+    });
+
+    listEl.querySelectorAll("button[data-product]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        btn.textContent = "Loading...";
+        const productId = btn.getAttribute("data-product");
+        const session = await omriGetSession();
+        try {
+          const resp = await fetch("/api/get-download-url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, accessToken: session.access_token })
+          });
+          const data = await resp.json();
+          const linksEl = document.getElementById(`links-${productId}`);
+          if (!resp.ok) {
+            linksEl.innerHTML = `<p class="form-message form-message-error">${data.error || "Something went wrong."}</p>`;
+          } else {
+            linksEl.innerHTML = data.links
+              .map((l) => `<p><a href="${l.url}" class="btn btn-outline-navy" style="margin:6px 0;">Download ${l.filename}</a></p>`)
+              .join("");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        btn.style.display = "none";
+      });
+    });
+  }
+
+  document.getElementById("logout-link").addEventListener("click", async (e) => {
+    e.preventDefault();
+    await omriSignOut();
+    window.location.href = "index.html";
+  });
+
+  loadAccount();
+</script>
+</body>
+</html>

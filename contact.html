@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Omri Investments</title>
+<meta name="description" content="Get in touch with Omri Investments about real estate underwriting, due diligence, and advisory services.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-logo"><img src="images/logo-full-color.png" alt="Omri Investments"></a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#9776;</button>
+    <nav class="site-nav" id="nav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="insights.html">Insights</a>
+      <a href="education.html">Education Materials</a>
+      <a href="login.html">Login</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="nav-cta active">Get In Touch</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow" style="color:#c9a94f;">Contact</span>
+    <h1>Let's Talk About Your Deal</h1>
+    <p>Tell us a bit about what you're evaluating and we'll follow up to schedule time.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container contact-grid">
+    <div>
+      <form class="contact-form" action="mailto:marc@omriinvestments.com" method="post" enctype="text/plain">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company">
+
+        <label for="message">Tell us about your deal or how we can help</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+      <p style="font-size:0.82rem; color:var(--gray-text); margin-top:10px;">This form opens your email client to send directly to Marc.</p>
+    </div>
+
+    <div class="contact-card">
+      <div class="item">
+        <div class="label">Email</div>
+        <a href="mailto:marc@omriinvestments.com">marc@omriinvestments.com</a>
+      </div>
+      <div class="item">
+        <div class="label">Phone</div>
+        <a href="tel:+19178817944">(917) 881-7944</a>
+      </div>
+      <div class="item">
+        <div class="label">Location</div>
+        <span>Miami Beach, FL</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="images/logo-white.png" alt="Omri Investments">
+        <p style="max-width:320px; color:rgba(255,255,255,0.6); font-size:0.9rem;">Real estate underwriting, due diligence, and capital structure advisory for acquisitions, recapitalizations, and development deals.</p>
+      </div>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="insights.html">Insights</a>
+        <a href="education.html">Education Materials</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Omri Investments. All rights reserved.</span>
+      <span>Miami Beach, FL</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
