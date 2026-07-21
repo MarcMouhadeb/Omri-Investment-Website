@@ -478,6 +478,10 @@ form.contact-form textarea { min-height: 140px; resize: vertical; }
 }
 .course-footer .btn { padding: 10px 22px; font-size: 0.88rem; }
 
+.course-card.bundle-card { border: 2px solid var(--gold); position: relative; }
+.course-card.bundle-card .course-badge { background: var(--gold); color: #fff; border-color: var(--gold); }
+.course-price-original { text-decoration: line-through; color: var(--gray-text); font-size: 0.95rem; font-weight: 400; margin-right: 8px; }
+
 /* Auth forms (login / signup) */
 form.auth-form { max-width: 440px; margin: 0 auto; }
 .form-message {
